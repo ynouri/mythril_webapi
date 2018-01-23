@@ -1,7 +1,11 @@
 
-# Created by https://www.gitignore.io/api/python
-
 .DS_Store
+*.sqlite3
+*.sqlite
+static/
+staticfiles/
+
+# Created by https://www.gitignore.io/api/python
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -108,5 +112,3 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/python
-*.sqlite3
-*.sqlite
