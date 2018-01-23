@@ -1,5 +1,5 @@
 # mythril_webapi
-Web API for Mythril - a Smart Contract Security Analysis Tool.
+Web API for [Mythril] (https://github.com/ConsenSys/mythril/) - a Smart Contract Security Analysis Tool.
 
 ## Prerequisites
 1. Python 3.6
