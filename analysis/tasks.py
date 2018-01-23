@@ -1,17 +1,13 @@
-# Create your tasks here
 from celery import shared_task
-
-
-@shared_task
-def add(x, y):
-    return x + y
-
+import os
+import subprocess
 
 @shared_task
-def mul(x, y):
-    return x * y
-
-
-@shared_task
-def xsum(numbers):
-    return sum(numbers)
+def myth_task(bytecode):
+	mythril_dir = "/Users/ynouri/Dropbox/Projects/Topcoder-Mythril/mythril/"
+	args = ['myth', '-x', '-c', bytecode]
+	p = subprocess.Popen(args, cwd=mythril_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	stdout = p.stdout.read().decode('utf-8')
+	stderr = p.stderr.read().decode('utf-8')
+	task_result = {'stdout': stdout, 'stderr': stderr}
+	return task_result
