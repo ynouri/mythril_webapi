@@ -9,6 +9,10 @@ Web API for [Mythril](https://github.com/ConsenSys/mythril/) - a Smart Contract 
 1. Celery
 1. RabbitMQ
 
+## File structure
+1. *mythril_webapi*: Django module
+1. *myth_rest*: Django REST Framework app
+
 ## Local Deployment on OS X
 
 ### Pip installs
