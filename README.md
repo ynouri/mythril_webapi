@@ -9,6 +9,8 @@ Web API for [Mythril](https://github.com/ConsenSys/mythril/) - a Smart Contract 
 1. Celeri
 
 ## Local Deployment on OS X
+
+### Pip installs
 ```bash
 pip install mythril
 pip install Django
@@ -16,7 +18,12 @@ pin install djangorestframework
 pip install -U Celery
 ```
 
-## RabbitMQ
+### Django + Django REST framework
+```bash
+```
+
+
+### RabbitMQ
 ```bash
 brew install rabbitmq
 sudo mkdir /usr/local/sbin
