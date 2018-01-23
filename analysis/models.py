@@ -1,25 +1,14 @@
 from django.db import models
 import uuid
+import celery.states
+
 
 
 class Analysis(models.Model):
 
 	BYTECODE = 'bytecode'
-	QUEUED = 'Queued'
-	IN_PROGRESS = 'In progress'
-	FINISHED = 'Finished'
-	ERROR = 'Error'
-
-	TYPE_CHOICES = (
-		(BYTECODE, 'bytecode'),
-	)
-
-	RESULT_CHOICES = (
-		(QUEUED, 'Queued'),
-		(IN_PROGRESS, 'In Progress'),
-		(FINISHED, 'Finished'),
-		(ERROR, 'Error')
-	)
+	TYPE_CHOICES = ((BYTECODE, 'bytecode'),)
+	RESULT_CHOICES = [(str(state), str(state).title()) for state in celery.states.ALL_STATES]
 
 	created = models.DateTimeField(auto_now_add=True)
 	submission_type = models.CharField(choices=TYPE_CHOICES, max_length=100)

@@ -30,9 +30,21 @@ def status(request, uuid):
 	"""
 	Returns the status of an analysis for a given UUID.
 	"""
-	analysis = Analysis.objects.filter(uuid=uuid).first()
-	serializer = AnalysisStatusSerializer(analysis)
-	return Response(serializer.data, status=rest_framework.status.HTTP_200_OK)
+	try:
+		analysis = Analysis.objects.filter(uuid=uuid).first()
+		if(analysis):
+			result = myth_task.AsyncResult(str(analysis.uuid)).result
+			analysis.error = result['stderr']
+			analysis.issues = result['stdout']
+			analysis.save()
+			serializer = AnalysisStatusSerializer(analysis)
+			return Response(serializer.data, status=rest_framework.status.HTTP_200_OK)
+		else:
+			return Response(serializer.data, status=rest_framework.status.HTTP_204_NO_CONTENT)
+	except:
+		return Response(status=rest_framework.status.HTTP_400_BAD_REQUEST)
+	
+	
 
 
 

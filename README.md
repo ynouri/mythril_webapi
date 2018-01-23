@@ -62,9 +62,19 @@ The following shell script will run:
 ## Notes
 
 
-## What would have been done with more time :)
-1. Add more unit tests
+## To do :)
+1. Expand and enhance existing unit tests:
+11. Django model
+11. Django serializers
+11. Django views
+11. Celery task
+11. Django REST API
 1. Heroku packaging
-1. Somehow I cannot get myth to display security issues for contracts that apparently do have some, would need some additional time to investigate this.
-1. Handle all extreme cases, error messages
+1. Mythril seems to display no found security issues for contracts that apparently do have some --> need to investigate
+1. Integrate advanced Mythril settings such as the depth
+1. Handle all limit cases, error messages
+1. Review and enhance exception handling
 1. Refine the status and report deserializers so that json response only display the relevant fields.
+1. Review security around default settings and login/passwords: Django, Celery, RabbitMQ, SQLite
+1. Review production settings vs test
+1. Adapt the Celery workers number settings to the deployment environment target (Heroku dynos?)
