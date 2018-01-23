@@ -10,8 +10,19 @@ Web API for [Mythril](https://github.com/ConsenSys/mythril/) - a Smart Contract 
 1. RabbitMQ
 
 ## File structure
-1. *mythril_webapi*: Django module
-1. *myth_rest*: Django REST Framework app
+1. *mythril_webapi*: Django project
+1. *analysis*: Django REST Framework app
+
+## Deployment on Heroku
+
+```bash
+git clone https://github.com/ynouri/mythril_webapi.git
+heroku login
+heroku create
+git push heroku master
+heroku run python manage.py migrate
+
+```
 
 ## Local Deployment on OS X
 
