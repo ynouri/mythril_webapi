@@ -33,9 +33,10 @@ def status(request, uuid):
 	try:
 		analysis = Analysis.objects.filter(uuid=uuid).first()
 		if(analysis):
-			result = myth_task.AsyncResult(str(analysis.uuid)).result
-			analysis.error = result['stderr']
-			analysis.issues = result['stdout']
+			task_async = myth_task.AsyncResult(str(analysis.uuid))
+			#analysis.error = task_async.result['stderr']
+			#analysis.issues = task_async.result['stdout']
+			analysis.result =  task_async.status
 			analysis.save()
 			serializer = AnalysisStatusSerializer(analysis)
 			return Response(serializer.data, status=rest_framework.status.HTTP_200_OK)
