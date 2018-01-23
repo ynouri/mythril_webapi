@@ -19,8 +19,8 @@ def bytecode_submission(request):
 	elif request.method == 'POST':
 		serializer = AnalysisSerializer(data=request.data)
 		if serializer.is_valid():
-				serializer.save()
-				t = myth_task.delay("0x5050")
+				submission = serializer.save()
+				t = myth_task.apply_async([submission.bytecode], task_id=str(submission.uuid))
 				return Response(serializer.data, status=rest_framework.status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=rest_framework.status.HTTP_400_BAD_REQUEST)
 

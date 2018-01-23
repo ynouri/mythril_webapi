@@ -51,11 +51,20 @@ Note: assume it is a dedicated server not AWS or Heroku.
 ```
 
 ## Running Tests
+The following shell script will run:
+1. Unit tests on Django Rest serializers
+1. Unit tests on the Celery task
+1. Curl command line tests on the running Web API
+```bash
+./all_tests.sh
+```
 
 ## Notes
 
 
 ## What would have been done with more time :)
-1. More tests
+1. Add more unit tests
 1. Heroku packaging
 1. Somehow I cannot get myth to display security issues for contracts that apparently do have some, would need some additional time to investigate this.
+1. Handle all extreme cases, error messages
+1. Refine the status and report deserializers so that json response only display the relevant fields.
