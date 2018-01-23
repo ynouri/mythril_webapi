@@ -5,6 +5,7 @@ from analysis.models import Analysis
 from analysis.serializers import *
 import uuid as uu
 from analysis.tasks import myth_task
+import celery.states
 
 
 @api_view(['GET', 'POST'])
@@ -41,12 +42,10 @@ def status(request, uuid):
 			serializer = AnalysisStatusSerializer(analysis)
 			return Response(serializer.data, status=rest_framework.status.HTTP_200_OK)
 		else:
-			return Response(serializer.data, status=rest_framework.status.HTTP_204_NO_CONTENT)
+			return Response(status=rest_framework.status.HTTP_204_NO_CONTENT)
 	except:
 		return Response(status=rest_framework.status.HTTP_400_BAD_REQUEST)
 	
-	
-
 
 
 @api_view(['GET'])
@@ -54,8 +53,18 @@ def report(request, uuid):
 	"""
 	Returns the report of the issues found in an analysis for a given UUID.
 	"""
-	analysis = Analysis.objects.filter(uuid=uuid).first()
-	serializer = AnalysisReportSerializer(analysis)
-	return Response(serializer.data, status=rest_framework.status.HTTP_200_OK)
+	try:
+		analysis = Analysis.objects.filter(uuid=uuid).first()
+		if(analysis):
+			task_async = myth_task.AsyncResult(str(analysis.uuid))
+			if(task_async.status == celery.states.SUCCESS):
+				analysis.error = task_async.result['stderr']
+				analysis.issues = task_async.result['stdout']
+				analysis.save()
+				serializer = AnalysisReportSerializer(analysis)
+				return Response(serializer.data, status=rest_framework.status.HTTP_200_OK)
+		return Response(status=rest_framework.status.HTTP_204_NO_CONTENT)
+	except:
+		return Response(status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
 

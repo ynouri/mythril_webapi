@@ -70,6 +70,7 @@ The following shell script will run:
 11. Celery task
 11. Django REST API
 1. Heroku packaging
+1. Cover remaining requirements: handle multiple contract bytecodes POST
 1. Mythril seems to display no found security issues for contracts that apparently do have some --> need to investigate
 1. Integrate advanced Mythril settings such as the depth
 1. Handle all limit cases, error messages
@@ -78,3 +79,4 @@ The following shell script will run:
 1. Review security around default settings and login/passwords: Django, Celery, RabbitMQ, SQLite
 1. Review production settings vs test
 1. Adapt the Celery workers number settings to the deployment environment target (Heroku dynos?)
+1. Enhance the diplay of issues returned by myth - return them in a dictionnary
