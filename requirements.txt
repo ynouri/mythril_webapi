@@ -6,3 +6,4 @@ amqp==2.2.2
 mythril==0.10.6
 gunicorn==19.7.1
 dj-database-url==0.4.2
+whitenoise==3.3.1
