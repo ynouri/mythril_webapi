@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Django tests
-./manage.py test test/
+python manage.py test test/ --verbosity=1
 
 # Command line tests
 ./test/test_command_line.sh

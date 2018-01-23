@@ -80,3 +80,4 @@ The following shell script will run:
 1. Review production settings vs test
 1. Adapt the Celery workers number settings to the deployment environment target (Heroku dynos?)
 1. Enhance the diplay of issues returned by myth - return them in a dictionnary
+1. Review the integration of Celery data model within Django's. Better model would be to have an Analysis model which would have a one-to-one (or one-to-many) relationship with CeleryTask model

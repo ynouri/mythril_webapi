@@ -1,6 +1,10 @@
 from django.test import TestCase
 from analysis.tasks import myth_task
 import time
+from test.contracts import contracts
+
+CALL_WITH_DYNAMIC_ADDRESS = "CALL with gas to dynamic address"
+NO_ISSUES_DETECTED = "No issues were detected"
 
 class TestCelery(TestCase):
 	
@@ -19,6 +23,13 @@ class TestCelery(TestCase):
 		result = myth_task.AsyncResult(uuid_str).result
 		error = result['stderr']
 		issues = result['stdout']
-		no_issues_expected = 'The analysis was completed successfully. No issues were detected.\n'
-		self.assertEqual(issues, no_issues_expected)
+		self.assertIn(NO_ISSUES_DETECTED, issues)
+
+	# Smart contract bytecode which returns issues
+	def test_bytecode_with_issues(self):
+		args = [contracts[9]]
+		task = myth_task.apply_async(args)
+		time.sleep(3)
+		self.assertIn(CALL_WITH_DYNAMIC_ADDRESS, task.result['stdout'])
+
 
