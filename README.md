@@ -6,7 +6,8 @@ Web API for [Mythril](https://github.com/ConsenSys/mythril/) - a Smart Contract 
 1. Mythril
 1. Django
 1. Django Rest Framework
-1. Celeri
+1. Celery
+1. RabbitMQ
 
 ## Local Deployment on OS X
 
@@ -15,7 +16,7 @@ Web API for [Mythril](https://github.com/ConsenSys/mythril/) - a Smart Contract 
 pip install mythril
 pip install Django
 pin install djangorestframework
-pip install -U Celery
+pip install celery
 ```
 
 ### Django + Django REST framework
@@ -23,12 +24,20 @@ pip install -U Celery
 ```
 
 
-### RabbitMQ
+### RabbitMQ (Celery broker)
 ```bash
 brew install rabbitmq
 sudo mkdir /usr/local/sbin
 sudo chown -R `whoami`:admin /usr/local/sbin
-# export PATH="/usr/local/sbin:$PATH" in ./bash_profile
+export PATH="/usr/local/sbin:$PATH" # or add this line in ./bash_profile and restart a shell
+rabbitmq-server # Runs the rabbitmq server.
+rabbitmqctl status # To check that the server is running
+```
+
+### Celery
+```bash
+celery -A tasks worker --loglevel=info
+celery -A tasks worker -c 2 --loglevel=info # To run wit 2 workers
 ```
 
 ## Production Build and Installation
@@ -45,3 +54,4 @@ Note: assume it is a dedicated server not AWS or Heroku.
 ## What would have been done with more time :)
 1. More tests
 1. Heroku packaging
+1. Somehow I cannot get myth to display security issues for contracts that apparently do have some, would need some additional time to investigate this.
