@@ -22,6 +22,7 @@ heroku create
 git push heroku master
 heroku run python manage.py collectstatic
 heroku run python manage.py migrate
+heroku addons:create rabbitmq-bigwig:pipkin
 heroku open
 
 ```
