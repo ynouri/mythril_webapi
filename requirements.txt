@@ -1,0 +1,6 @@
+Django==2.0.1
+djangorestframework==3.7.7
+celery==4.1.0
+SQLAlchemy==1.1.9
+amqp==2.2.2
+mythril==0.10.6

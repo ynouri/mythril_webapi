@@ -40,8 +40,8 @@ rabbitmqctl status # To check that the server is running
 
 ### Celery
 ```bash
-celery -A tasks worker --loglevel=info
-celery -A tasks worker -c 2 --loglevel=info # To run wit 2 workers
+# Runs a single worker. To run in root folder (mythril_webapi), not project folder (mythril_webap/myhtril_webapi)
+celery worker -A mythril_webapi.celery_app --loglevel=info --concurrency=1
 ```
 
 ## Production Build and Installation
