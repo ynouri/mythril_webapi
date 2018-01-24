@@ -1,7 +1,7 @@
 # mythril_webapi
 Web API for [Mythril](https://github.com/ConsenSys/mythril/) - a Smart Contract Security Analysis Tool.
 
-## Prerequisites
+## Pre-requisites
 1. Python 3.6
 1. Mythril
 1. Django
@@ -9,11 +9,15 @@ Web API for [Mythril](https://github.com/ConsenSys/mythril/) - a Smart Contract 
 1. Celery
 1. RabbitMQ
 
+Detailed dependencies and versions are available in the requirements.txt file.
+
 ## File structure
 1. *mythril_webapi*: Django project
 1. *analysis*: Django REST Framework app
 
 ## Deployment on Heroku
+
+*Important note:* I had very little time to test the Heroku deployment, and it's very likely to not be working in its current state. If possible, please see next part focusing on MacOS deployment.
 
 ```bash
 # Clone the git repo
@@ -30,7 +34,6 @@ heroku logs --tail
 
 # Migrate the model, only first push
 heroku run python manage.py migrate
-heroku run python manage.py migrate django_celery_results
 
 # Start the CloudAMPQ service
 heroku addons:create cloudamqp
@@ -43,54 +46,80 @@ heroku open
 
 ```
 
-## Local Deployment on OS X
+## Local Deployment on MacOS
 
-### Pip installs
+
+### Terminal 1 - web app
 ```bash
-pip install mythril
-pip install Django
-pin install djangorestframework
-pip install celery
+# Clone the git repo
+git clone https://github.com/ynouri/mythril_webapi.git deploy_test
+
+# Deploy a virtual environment and install the dependencies
+virtualenv deploy_env
+source deploy_env/bin/activate
+pip install -r requirements.txt
+
+# Deploy static assets
+python manage.py collectstatic --no-input
+
+# Migrate the models
+python manage.py migrate
+
+# Run Django server
+python manage.py runserver
+
 ```
 
-### Django + Django REST framework
+### Terminal 2 - RabbitMQ
 ```bash
-```
-
-
-### RabbitMQ (Celery broker)
-```bash
-brew install rabbitmq
-sudo mkdir /usr/local/sbin
+# Make sure to have the correct rights on /usr/local/sbin, and add it to $PATH
 sudo chown -R `whoami`:admin /usr/local/sbin
 export PATH="/usr/local/sbin:$PATH" # or add this line in ./bash_profile and restart a shell
-rabbitmq-server # Runs the rabbitmq server.
-rabbitmqctl status # To check that the server is running
+
+# Install RabbitMQ
+brew install rabbitmq
+
+# Run RabbitMQ server
+rabbitmq-server
+
+# Check if it is running correctly
+rabbitmqctl status
 ```
 
-### Celery
+### Terminal 3 - Celery
 ```bash
-# Runs a single worker. To run in root folder (mythril_webapi), not project folder (mythril_webap/myhtril_webapi)
+# Go to deploy folder and switch to deploy environment
+cd deploy_test
+source deploy_env/bin/activate
+
+# Run Celery worker
 celery worker -A mythril_webapi.celery_app --loglevel=info --concurrency=1
 ```
 
-## Production Build and Installation
-How to build the application for upload to a server
+### Terminal 4 - Run tests
 ```bash
-Note: assume it is a dedicated server not AWS or Heroku.
-```
+# Go to deploy folder and switch to deploy environment
+cd deploy_test
+source deploy_env/bin/activate
 
-## Running Tests
-The following shell script will run:
-1. Unit tests on Django Rest serializers
-1. Unit tests on the Celery task
-1. Curl command line tests on the running Web API
-```bash
+# Run the tests
 ./all_tests.sh
 ```
 
-## Notes
+### Web browser
+Open http://127.0.0.1:8000/mythril/v1/analysis/. Django REST framework provides a browsable API which can be used to play with the API.
 
+## Tests
+```bash
+./all_tests.sh
+```
+This script will run:
+1. Unit tests on Django Rest serializers
+1. Unit tests on the Celery task
+1. Unit tests on the Web API
+1. Curl command line tests on the running Web API
+
+Most of the tests are using smart contract bytecode source from Mythril samples or Ethernaut.
 
 ## To do :)
 1. Expand and enhance existing unit tests:
@@ -99,9 +128,9 @@ The following shell script will run:
 11. Django views
 11. Celery task
 11. Django REST API
-1. Heroku packaging
+1. Validate fully Heroku packaging
 1. Cover remaining requirements: handle multiple contract bytecodes POST
-1. Mythril seems to display no found security issues for contracts that apparently do have some --> need to investigate
+1. Mythril seems to display no found security issues for contracts that apparently do have some. Might not have taken the right bytecode in Remix.
 1. Integrate advanced Mythril settings such as the depth
 1. Handle all limit cases, error messages
 1. Review and enhance exception handling
