@@ -14,12 +14,17 @@ import os
 
 # Celery settings
 
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+# Local
+#CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+CELERY_BROKER_URL = os.environ.get("CLOUDAMQP_URL", "amqp://guest:guest@localhost//")
+CELERY_BROKER_POOL_LIMIT = 1
+CELERY_BROKER_CONNECTION_MAX_RETRIES = None
 
 #: Only add pickle to this list if your broker is secured
 #: from unwanted access (see userguide/security.html)
 CELERY_ACCEPT_CONTENT = ['json']
-CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
+#CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
+#CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_SERIALIZER = 'json'
 
 
@@ -44,6 +49,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'rest_framework',
+    'django_celery_results',
     'analysis.apps.AnalysisConfig',
     'django.contrib.admin',
     'django.contrib.auth',
