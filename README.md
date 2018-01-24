@@ -24,6 +24,7 @@ heroku logs --tail
 # Following collectstatic line is apparently run automatically by Heroku during the push
 #heroku run python manage.py collectstatic
 heroku run python manage.py migrate
+heroku run python manage.py migrate django_celery_results
 heroku addons:create rabbitmq-bigwig:pipkin
 heroku open
 
