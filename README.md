@@ -16,16 +16,29 @@ Web API for [Mythril](https://github.com/ConsenSys/mythril/) - a Smart Contract 
 ## Deployment on Heroku
 
 ```bash
+# Clone the git repo
 git clone https://github.com/ynouri/mythril_webapi.git
+
+# Login to Heroku, create app and push repo
 heroku login
 heroku create
 git push heroku master
 heroku logs --tail
-# Following collectstatic line is apparently run automatically by Heroku during the push
+
+# Following line is apparently run automatically by Heroku during the push. Not needed
 #heroku run python manage.py collectstatic
+
+# Migrate the model, only first push
 heroku run python manage.py migrate
 heroku run python manage.py migrate django_celery_results
-heroku addons:create rabbitmq-bigwig:pipkin
+
+# Start the CloudAMPQ service
+heroku addons:create cloudamqp
+
+# Start the Celery worker within a one-off dyno
+heroku run celery worker -A mythril_webapi.celery_app --loglevel=info --concurrency=1
+
+# Open the app
 heroku open
 
 ```
