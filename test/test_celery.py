@@ -14,7 +14,7 @@ class TestCelery(TestCase):
 		args = ["0x5050"]
 		uuid_str = '12345678-1234-5678-1234-567812345678'
 		task = myth_task.apply_async(args, task_id=uuid_str)
-		time.sleep(2)
+		time.sleep(5)
 		self.assertEqual(task.status, 'SUCCESS')
 
 	# Gets the Celery task created under test_send_task and check that the myth execution succeeded
@@ -29,7 +29,7 @@ class TestCelery(TestCase):
 	def test_bytecode_with_issues(self):
 		args = [contracts[9]]
 		task = myth_task.apply_async(args)
-		time.sleep(3)
+		time.sleep(5)
 		self.assertIn(CALL_WITH_DYNAMIC_ADDRESS, task.result['stdout'])
 
 

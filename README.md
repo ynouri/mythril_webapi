@@ -17,8 +17,6 @@ Detailed dependencies and versions are available in the requirements.txt file.
 
 ## Deployment on Heroku
 
-*Important note:* I had very little time to test the Heroku deployment, and it's very likely to not be working in its current state. If possible, please see next part focusing on MacOS deployment.
-
 ```bash
 # Clone the git repo
 git clone https://github.com/ynouri/mythril_webapi.git
@@ -41,13 +39,14 @@ heroku addons:create cloudamqp
 # Start the Celery worker within a one-off dyno
 heroku run celery worker -A mythril_webapi.celery_app --loglevel=info --concurrency=1
 
-# Open the app
+# Open the app. The browsable REST API is available at /mythril/v1/analysis/
 heroku open
-
 ```
 
-## Local Deployment on MacOS
+Example: https://cryptic-plateau-44263.herokuapp.com/mythril/v1/analysis/
 
+
+## Local Deployment on MacOS
 
 ### Terminal 1 - web app
 ```bash
@@ -121,13 +120,10 @@ This script will run:
 
 Most of the tests are using smart contract bytecode source from Mythril samples or Ethernaut.
 
+
 ## To do :)
-1. Expand and enhance existing unit tests:
-11. Django model
-11. Django serializers
-11. Django views
-11. Celery task
-11. Django REST API
+1. Expand and enhance existing unit tests (model, serializers, views, tasks, API!!)
+1. Some tests depend on the execution time of myth and are not deterministic, this has to be fixed.
 1. Validate fully Heroku packaging
 1. Cover remaining requirements: handle multiple contract bytecodes POST
 1. Mythril seems to display no found security issues for contracts that apparently do have some. Might not have taken the right bytecode in Remix.
